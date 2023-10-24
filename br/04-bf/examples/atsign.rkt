@@ -1,3 +1,3 @@
-#lang reader "../reader.rkt"
+#lang bf
 Greatest language ever!
 ++++-+++-++-++[>++++-+++-++-++<-]>.
