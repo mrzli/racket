@@ -1,13 +1,5 @@
 #lang racket/base
 
-(require brag/support)
+(require "lexer/lexer.rkt")
 
-(define rts-lexer
-  (lexer-srcloc
-   ["a" (token 'A lexeme)]
-   [whitespace (token lexeme #:skip? #t)]
-   [(from/stop-before "//" "\n") (token lexeme #:skip? #t)]
-   [(from/to "/*" "*/") (token lexeme #:skip? #t)]
-   ))
-
-(provide rts-lexer)
+(provide (all-from-out "lexer/lexer.rkt"))

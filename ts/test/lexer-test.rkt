@@ -14,3 +14,5 @@
 
 ;(pretty-print (lex "aa a\na//fdsa"))
 (pretty-print (lex-concise "aa a\na//fdsa"))
+
+; ((from/to "\"" "\"") (open-input-string "\"aaa\" bbb"))
