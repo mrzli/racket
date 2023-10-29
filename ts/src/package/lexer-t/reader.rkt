@@ -21,11 +21,11 @@
     (error "Input/result pair mismatch"))
   (define parsed-data (get-parsed-data main-data test-cases-data))
 
-  parsed-data
+  ; parsed-data
 
-  ; (list
-  ;   ('require-lexer (hash-ref parsed-data 'package) (hash-ref parsed-data 'lexer))
-  ;   ('displayln (hash-ref parsed-data 'cases)))
+  (list
+    ('require-lexer (hash-ref parsed-data 'package) (hash-ref parsed-data 'lexer))
+    ('displayln (hash-ref parsed-data 'cases)))
   )
 
 ; split by "---"
