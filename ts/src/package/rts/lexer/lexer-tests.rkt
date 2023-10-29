@@ -1,6 +1,9 @@
 #lang racket/base
 
-(require rts/lexer brag/support racket/pretty)
+(require rts/lexer brag/support)
+
+(module+ test
+  (require rackunit))
 
 (define (lex str)
   (apply-port-proc rts-lexer str))
@@ -12,7 +15,7 @@
              #:unless (token-struct-skip? t))
     (list (token-struct-type t) (token-struct-val t))))
 
-;(pretty-print (lex "aa a\na//fdsa"))
-(pretty-print (lex-concise "aaa aaaa 12 12e+11"))
-
-; ((from/to "\"" "\"") (open-input-string "\"aaa\" bbb"))
+(module+ test
+  (check-equal? (lex-concise "ident1 ident2") '((IDENT "ident1") (IDENT "ident2")))
+  ;(check-equal? 1 2)
+  )

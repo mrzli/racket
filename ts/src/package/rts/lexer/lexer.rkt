@@ -4,32 +4,79 @@
 
 (provide rts-lexer)
 
-; (define rts-lexer
-;   (lexer-srcloc
-;    ["a" (token 'A lexeme)]
-;    [whitespace (token lexeme #:skip? #t)]
-;    [(from/stop-before "//" "\n") (token lexeme #:skip? #t)]
-;    [(from/to "/*" "*/") (token lexeme #:skip? #t)]
-;    ))
+; basic
+(define-lex-abbrev alpha-upper (:/ "A" "Z"))
+(define-lex-abbrev alpha-lower (:/ "a" "z"))
+(define-lex-abbrev alpha (:or alpha-upper alpha-lower))
+(define-lex-abbrev digit (:/ "0" "9"))
+(define-lex-abbrev alphanum (:or alpha digit))
 
-; (define string-lexer
-;   (lexer-srcloc
-;    [(from/to "\"" "\"") (token 'STRING lexeme)]
-;    ))
+; comment
+(define-lex-abbrev line-comment (from/stop-before "//" "\n"))
+(define-lex-abbrev block-comment (from/to "/*" "*/"))
 
-(define (rts-lexer port)
-  (define (next-token port)
-    (cond
-      [(string-match? port "aaa")]
-      
-      
+; identifier
+(define-lex-abbrev identifier-start-char (:or alpha "_"))
+(define-lex-abbrev identifier-char (:or alphanum "_"))
+(define-lex-abbrev identifier (:: identifier-start-char (:* identifier-char)))
+
+; number
+(define-lex-abbrev number-sign (:or "+" "-"))
+(define-lex-abbrev non-zero-digit (:/ "1" "9"))
+
+(define-lex-abbrev hex-alpha-lower (:/ "a" "f"))
+(define-lex-abbrev hex-alpha-upper (:/ "A" "F"))
+(define-lex-abbrev hex-alpha (:or hex-alpha-lower hex-alpha-upper))
+(define-lex-abbrev hex-digit (:or digit hex-alpha))
+
+(define-lex-abbrev octal-digit (:/ "0" "7"))
+
+(define-lex-abbrev binary-digit (:/ "0" "1"))
+
+(define-lex-abbrev decimal-whole-part (:or "0" (:: non-zero-digit (:* digit))))
+(define-lex-abbrev decimal-fractional-part (:+ digit))
+(define-lex-abbrev decimal-exponent-part
+  (:: (:or "e" "E") (:? number-sign) decimal-whole-part))
+
+(define-lex-abbrev hex-number (:: (:? number-sign) "0x" (:+ hex-digit)))
+(define-lex-abbrev octal-number (:: (:? number-sign) "0o" (:+ octal-digit)))
+(define-lex-abbrev binary-number (:: (:? number-sign) "0b" (:+ binary-digit)))
+
+(define-lex-abbrev decimal-number
+  (:: (:? number-sign) decimal-whole-part (:? "." decimal-fractional-part) (:? decimal-exponent-part)))
+
+(define-lex-abbrev number (:or hex-number octal-number binary-number decimal-number))
+
+; string
 
 
-(define (string-match? port str)
-  (define chars (string->list str))
-  (for ([ch (in-string str)])
-    (define next (peek port))
-    (unless (char=? ch next)
-      (return #f)))
-  #t)
+(define rts-lexer
+  (lexer-srcloc
+   [whitespace (token lexeme #:skip? #t)]
+   [line-comment (token lexeme #:skip? #t)]
+   [block-comment (token lexeme #:skip? #t)]
+   [identifier (token 'IDENT lexeme)]
+   [number (token 'NUM lexeme)]
+   ))
+
+(define string-lexer
+  (lexer-srcloc
+   [(from/to "\"" "\"") (token 'STRING lexeme)]
+   ))
+
+; (define (rts-lexer port)
+;   (define (next-token port)
+;     (cond
+;       [(string-match? port "aaa")]
+
+
+
+
+; (define (string-match? port str)
+;   (define chars (string->list str))
+;   (for ([ch (in-string str)])
+;     (define next (peek port))
+;     (unless (char=? ch next)
+;       (return #f)))
+;   #t)
 

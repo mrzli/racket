@@ -6,7 +6,8 @@
   (syntax-case stx ()
     [(_ EXPR ...)
      #'(#%module-begin
-        (displayln EXPR) ...)]))
+        'EXPR ...)]))
+
 (provide (rename-out [rts-mb #%module-begin]))
 
 (provide (except-out (all-from-out racket/base) #%module-begin))

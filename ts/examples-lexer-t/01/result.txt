@@ -1,0 +1,16 @@
+#lang racket/base
+
+
+
+(module+ test
+  (require rackunit lexer-t/expander)
+  (require (rename-in <package-name> (<orig-lexer-name> lang-lexer)))
+  
+  (define (l str)
+    (lex lang-lexer str))
+  )
+
+(module+ test
+  (check-equal? 1 1)
+  (check-equal? 1 2)
+  )
