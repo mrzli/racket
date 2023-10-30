@@ -6,7 +6,6 @@
 
 (define (read-syntax path port)
   (define parsed (parse port))
-  ; (println parsed)
   (define module-datum `(module lexer-t-mod lexer-t/expander ,parsed))
   (datum->syntax #f module-datum))
 
@@ -27,15 +26,6 @@
    (hash-ref parsed-data 'lexer)
    (hash-ref parsed-data 'cases)
    )
-
-  ; (define cases
-  ;   (let ([raw (hash-ref parsed-data 'cases)])
-  ;     (map (lambda (c) (list 'lexer-t-case (first c) (quasiquote ,(second c)))) raw)
-  ;     ))
-
-  ; `(lexer-t-program
-  ;   (require-for-test ,@(list (hash-ref parsed-data 'module-id) (hash-ref parsed-data 'lexer)))
-  ;   (lexer-t-cases ,@cases))
   )
 
 ; split by "---"
@@ -105,6 +95,8 @@
   (cond
     [(empty? lst) '()]
     [else
-     (define first-part (take lst n))
-     (define second-part (drop lst n))
-     (cons first-part (split-list-by second-part n))]))
+     (let ([first-part (take lst n)]
+           [second-part (drop lst n)])
+       (cons first-part (split-list-by second-part n))
+       )]
+    ))
