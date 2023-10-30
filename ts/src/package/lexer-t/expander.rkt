@@ -1,27 +1,37 @@
 #lang racket/base
 
-(require racket/pretty brag/support)
-(require (for-syntax racket/base))
+(require brag/support)
+; (require racket/pretty)
+(require (for-syntax racket/base racket/syntax))
 
 (provide (except-out (all-from-out racket/base) #%module-begin))
 (provide (rename-out [lexer-t-mb #%module-begin]))
+(provide lexer-t-program)
 (provide lex)
 
 (define-syntax (lexer-t-mb stx)
   (syntax-case stx ()
-    [(_ EXPR ...)
-     #'(#%module-begin
-        ; (require rackunit lexer-t/expander)
-        ; (require (rename-in <package-name> (<orig-lexer-name> lang-lexer)))
+    [(_ DATA)
+     #'(#%module-begin (lexer-t-program DATA))]))
 
-        ; (pretty-print lang-lexer)
+(define-syntax (lexer-t-program stx)
+  (syntax-case stx ()
+    [(_ (MODULE-ID LEXER ((INPUT (TOKEN ...)) ...)))
+     (with-syntax ([M (format-id #'MODULE-ID "~a" #'MODULE-ID)]
+                   [L (format-id #'LEXER "~a" #'LEXER)])
+       #'(module+ test
+           (require rackunit lexer-t/expander)
+           (require (rename-in M (L lang-lexer)))
 
-        (pretty-print 'EXPR) ...)]))
+           (define (l str)
+             (lex lang-lexer str))
 
-; (define-syntax (require-lexer stx)
-;   (syntax-case stx ()
-;     [(_ PACKAGE-NAME ORIG-LEXER-NAME)
-;      #'(require <package-name> (rename-in <package-name> (<orig-lexer-name> lang-lexer)))]))
+           (check-equal? (l INPUT) '(TOKEN ...)) ...
+           )
+       )]
+    ))
+
+; runtime ---------
 
 (define (lex lexer str)
   (define sl-tokens (apply-port-proc lexer str))

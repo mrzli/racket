@@ -1,6 +1,6 @@
 #lang lexer-t
 
-package: rts
+module-id: rts/lexer
 lexer: rts-lexer
 
 -----
@@ -16,7 +16,7 @@ IDENT part
 -----
 another stuff to lex
 -----
-IDENT "another  "
+IDENT another
 IDENT stuff
 IDENT to
 IDENT lex

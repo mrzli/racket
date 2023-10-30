@@ -6,6 +6,7 @@
 
 (define (read-syntax path port)
   (define parsed (parse port))
+  ; (println parsed)
   (define module-datum `(module lexer-t-mod lexer-t/expander ,parsed))
   (datum->syntax #f module-datum))
 
@@ -21,11 +22,20 @@
     (error "Input/result pair mismatch"))
   (define parsed-data (get-parsed-data main-data test-cases-data))
 
-  ; parsed-data
-
   (list
-    ('require-lexer (hash-ref parsed-data 'package) (hash-ref parsed-data 'lexer))
-    ('displayln (hash-ref parsed-data 'cases)))
+   (hash-ref parsed-data 'module-id)
+   (hash-ref parsed-data 'lexer)
+   (hash-ref parsed-data 'cases)
+   )
+
+  ; (define cases
+  ;   (let ([raw (hash-ref parsed-data 'cases)])
+  ;     (map (lambda (c) (list 'lexer-t-case (first c) (quasiquote ,(second c)))) raw)
+  ;     ))
+
+  ; `(lexer-t-program
+  ;   (require-for-test ,@(list (hash-ref parsed-data 'module-id) (hash-ref parsed-data 'lexer)))
+  ;   (lexer-t-cases ,@cases))
   )
 
 ; split by "---"
@@ -48,8 +58,8 @@
   (define filtered-main-data (filter non-blank-string? main-data-raw))
   (define main-data-components (flatten (map get-main-data-kw filtered-main-data)))
   (define h (apply hasheq main-data-components))
-  (unless (hash-has-key? h 'package)
-    (error "Main data should have a 'package' definition"))
+  (unless (hash-has-key? h 'module-id)
+    (error "Main data should have a 'module-id' definition"))
   (unless (hash-has-key? h 'lexer)
     (error "Main data should have a 'lexer' definition"))
   h
@@ -76,14 +86,6 @@
   (list final-input final-result)
   )
 
-; (define (process-test-case-result-item item)
-;   (define components (string-split item " "))
-;   (displayln components)
-;   (unless (= (length components) 2)
-;     (error "Test case result item should have a type and a value"))
-;   (cons (string->symbol (first components)) (second components))
-;   )
-
 (define (process-test-case-token-line line)
   (define parts (string-split line " "))
   (define name (first parts))
@@ -92,7 +94,7 @@
            [val-len (string-length value)]
            [is-quoted (and (> val-len 1) (string-prefix? value "\"") (string-suffix? value "\""))])
       (if is-quoted (substring value 1 (- val-len 1)) value)))
-  (cons (string->symbol name) value)
+  (list (string->symbol name) value)
   )
 
 (define (separator-line? line) (string-prefix? line "---"))
