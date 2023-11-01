@@ -16,8 +16,8 @@
 (define-lex-abbrev block-comment (from/to "/*" "*/"))
 
 ; identifier
-(define-lex-abbrev identifier-start-char (:or alpha "_"))
-(define-lex-abbrev identifier-char (:or alphanum "_"))
+(define-lex-abbrev identifier-start-char (:or alpha "_" "$"))
+(define-lex-abbrev identifier-char (:or alphanum "_" "$"))
 (define-lex-abbrev identifier (:: identifier-start-char (:* identifier-char)))
 
 ; number
@@ -33,8 +33,9 @@
 
 (define-lex-abbrev binary-digit (:/ "0" "1"))
 
-(define-lex-abbrev decimal-whole-part (:or "0" (:: non-zero-digit (:* digit))))
-(define-lex-abbrev decimal-fractional-part (:+ digit))
+(define-lex-abbrev decimal_segment (:: (:? "_") (:+ digit)))
+(define-lex-abbrev decimal-whole-part (:or "0" (:: non-zero-digit (:* decimal_segment))))
+(define-lex-abbrev decimal-fractional-part (:: digit (:* decimal_segment)))
 (define-lex-abbrev decimal-exponent-part
   (:: (:or "e" "E") (:? number-sign) decimal-whole-part))
 
