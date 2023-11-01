@@ -1,0 +1,219 @@
+#lang brag
+
+source-file                      : root-statement*
+
+root-statement                   : export-assignment
+                                 | export-declaration
+                                 | import-declaration
+                                 | base-statement
+
+export-assignment                : "export" "=" expression ";"
+export-declaration               : export-declaration-all
+                                 | export-declaration-named
+export-declaration-all           : "export" ["type"] "*" "from" expression ";"
+export-declaration-named         : "export" ["type"] named-export-bindings ["from" expression] ";"
+named-export-bindings            : "{" named-exports "}"
+named-exports                    : export-specifier*
+export-specifier                 : ["type"] [identifier "as"] identifier
+
+import-declaration               : "import" [import-clause "from"] expression ";"
+import-clause                    : import-clause-all
+                                 | import-clause-specific
+                                 | import-clause-both
+import-clause-all                : ["type"] identifier
+import-clause-specific           : ["type"] named-import-bindings
+import-clause-both               : ["type"] identifier "," named-import-bindings
+named-import-bindings            : "{" named-imports "}"
+named-imports                    : import-specifier*
+import-specifier                 : ["type"] [identifier "as"] identifier
+
+base-statement                   : block
+                                 | expression-statement
+                                 | variable-statement
+                                 | if-statement
+                                 | switch-statement
+                                 | for-statement
+                                 | for-in-statement
+                                 | for-of-statement
+                                 | while-statement
+                                 | throw-statement
+                                 | try-statement
+                                 | class-declaration
+                                 | enum-declaration
+                                 | function-declaration
+                                 | interface-declaration
+                                 | type-alias-declaration
+
+inner-statement                  : break-statement
+                                 | continue-statement
+                                 | return-statement
+                                 | base-statement
+
+block                            : "{" inner-statement* "}"
+expression-statement             : expression ";"
+variable-statement               : ["export"] variable-declaration-list ";"
+
+if-statement                     : "if" "(" expression ")" inner-statement ["else" inner-statement]
+switch-statement                 : "switch" "(" expression ")" case-block
+case-block                       : "{" case-or-default-clause* "}"
+case-or-default-clause           : case-clause
+                                 | default-clause
+case-clause                      : "case" expression ":" inner-statement*
+default-clause                   : "default" ":" inner-statement*
+for-statement                    : "for" "(" [variable-declaration-list] ";" [expression] ";" [expression] ")" inner-statement
+for-in-statement                 : "for" "(" [variable-declaration-list] "in" expression ")" inner-statement
+for-of-statement                 : "for" ["await"] "(" [variable-declaration-list] "of" expression ")" inner-statement
+while-statement                  : "while" "(" expression ")" inner-statement
+
+throw-statement                  : "throw" expression ";"
+try-statement                    : "try" block [catch-clause] ["finally" block]
+catch-clause                     : "catch" ["(" variable-declaration ")"] block
+
+break-statement                  : "break" ";"
+continue-statement               : "continue" ";"
+return-statement                 : "return" [expression] ";"
+
+class-declaration                : decorator* ["export" ["default"]] ["abstract"] "class" [identifier] [type-parameter-declarations] [class-heritage-clauses] "{" class-element* "}"
+type-parameter-declarations      : "<" type-parameter-declaration (", " type-parameter-declaration)* ">"
+type-parameter-declaration       : identifier ["extends" type-node] ["=" type-node]
+class-heritage-clauses           : heritage-clause-extends
+                                 | heritage-clause-implements
+                                 | heritage-clause-extends heritage-clause-implements
+                                 | heritage-clause-implements heritage-clause-extends
+heritage-clause-extends          : "extends" expression-with-type-arguments+
+heritage-clause-implements       : "implements" expression-with-type-arguments+
+expression-with-type-arguments   : expression ["<" type-node (", " type-node)* ">"]
+class-element                    : constructor-declaration
+                                 | method-declaration
+                                 | property-declaration
+                                 | get-accessor-declaration
+                                 | set-accessor-declaration
+constructor-declaration          : [access-modifier] "constructor" [type-parameter-declarations] "(" parameter-declarations ")" block
+method-declaration               : decorator* [access-modifier] ["static"] ["abstract"] ["override"] ["async"] identifier ["?"] [type-parameter-declarations] "(" parameter-declarations ")" [":" type-node] block
+property-declaration             : [access-modifier] ["static"] ["abstract"] ["override"] ["readonly"] identifier ["?"] [":" type-node] expression ";"
+get-accessor-declaration         : [access-modifier] ["static"] ["abstract"] ["override"] "get" identifier [type-parameter-declarations] "(" ")" [":" type-node] block
+set-accessor-declaration         : [access-modifier] ["static"] ["abstract"] ["override"] "set" identifier [type-parameter-declarations] "(" parameter-declarations ")" block
+
+enum-declaration                 : ["export"] "enum" identifier "{" [enum-members] "}"
+enum-members                     : enum-member ("," enum-member)* [","]
+enum-member                      : property-name ["=" expression]
+
+decorator                        : "@" expression
+parameter-declarations           : parameter-declaration (", " parameter-declaration)* [","]
+parameter-declaration            : decorator* [access-modifier] ["readonly"] identifier ["?"] [":" type-node] ["=" expression]
+access-modifier                  : "public" | "protected" | "private"
+
+function-declaration             : ["export" ["default"]] ["async"] "function" ["*"] [identifier] [type-parameter-declarations] "(" parameter-declarations ")" [":" type-node] block
+
+interface-declaration            : ["export" ["default"]] "interface" identifier [type-parameter-declarations] [heritage-clause-extends] "{" type-element* "}"
+
+variable-declaration-list        : ("const" | "let")
+variable-declarations            : variable-declaration (", " variable-declaration)*
+variable-declaration             : binding-name [":" type-node] ["=" expression]
+
+binding-name                     : array-binding-pattern
+                                 | object-binding-pattern
+                                 | identifier
+array-binding-pattern            : "[" binding-element* "]"
+object-binding-pattern           : "{" binding-element* "}"
+binding-element                  : spread-binding-element | normal-binding-element
+spread-binding-element           : "..." binding-name
+normal-binding-element           : [property-name ":"] binding-name
+property-name                    : computed-property-name
+                                 | identifier
+                                 | numeric-literal
+                                 | private-identifier
+                                 | string-literal
+computed-property-name           : "[" expression "]"
+private-identifier               : "#" IDENTIFIER
+
+expression2                       : array-literal-expression
+                                  | as-expression
+                                  | await-expression
+                                  | binary-expression
+                                  | call-expression
+                                  | conditional-expression
+                                  | delete-expression
+                                  | element-access-expression
+                                  | function-expression
+                                  | import-expression
+                                  | new-expression
+                                  | non-null-expression
+                                  | object-literal-expression
+                                  | parenthesized-expression
+                                  | postfix-unary-expression
+                                  | prefix-unary-expression
+                                  | property-access-expression
+                                  | super-expression
+                                  | template-expression
+                                  | this-expression
+                                  | type-of-expression
+                                  | void-expression
+                                  | yield-expression
+                                  | arrow-function
+                                  | spread-element
+                                  | jsx-element-like
+                                  | identifier
+                                  | null-literal
+                                  | false-literal
+                                  | true-literal
+                                  | numeric-literal
+                                  | regular-expression-literal
+                                  | string-literal
+                                  | no-substitution-template-literal
+expressions                      : expression ("," expression)* [","]
+
+expression                       : expression-yield-or-above
+expression-yield-or-above        : "yield" expression-yield-or-above | expression-assignment-or-above
+expression-assignment-or-above   : ""
+assignment-operator              : "="
+                                 | "+=" | "-="
+                                 | "**="
+                                 | "*=" | "/=" | "%="
+                                 | "<<=" | ">>=" | ">>>="
+                                 | "&=" | "^=" | "|="
+                                 | "&&=" | "||=" | "??="
+expression-conditional-or-above  : ""
+
+
+array-literal-expression         : "[" [expressions] "]"
+as-expression                    : expression "as" type-node
+await-expression                 : "await" expression
+binary-expression                : ""
+call-expression                  : expression ["?."] [type-node-list] "(" [expressions] ")"
+conditional-expression           : expression "?" expression ":" expression
+delete-expression                : "delete" expression
+element-access-expression        : ""
+function-expression              : ""
+import-expression                : ""
+new-expression                   : ""
+non-null-expression              : ""
+object-literal-expression        : ""
+parenthesized-expression         : ""
+postfix-unary-expression         : ""
+prefix-unary-expression          : ""
+property-access-expression       : ""
+super-expression                 : ""
+template-expression              : ""
+this-expression                  : ""
+type-of-expression               : ""
+void-expression                  : ""
+
+
+arrow-function                   : ""
+spread-element                   : ""
+jsx-element-like                 : ""
+identifier                       : IDENTIFIER
+
+null-literal                     : "null"
+false-literal                    : "false"
+true-literal                     : "true"
+numeric-literal                  : NUMBER
+regular-expression-literal       : REGEXP
+string-literal                   : STRING
+no-substitution-template-literal : NO-SUBSTITUTION-TEMPLATE
+
+type-alias-declaration           : ["export"] "type" identifier [type-parameter-declarations] "=" type-node ";"
+type-node-list                   : "<" type-node ("," type-node)* ">"
+type-node                        : ""
+type-element                     : ""

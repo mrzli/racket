@@ -21,6 +21,8 @@
     (error "Input/result pair mismatch"))
   (define parsed-data (get-parsed-data main-data test-cases-data))
 
+  ;(println (hash-ref parsed-data 'cases))
+
   (list
    (hash-ref parsed-data 'module-id)
    (hash-ref parsed-data 'lexer)

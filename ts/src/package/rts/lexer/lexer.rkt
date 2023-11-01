@@ -43,40 +43,37 @@
 (define-lex-abbrev binary-number (:: (:? number-sign) "0b" (:+ binary-digit)))
 
 (define-lex-abbrev decimal-number
-  (:: (:? number-sign) decimal-whole-part (:? "." decimal-fractional-part) (:? decimal-exponent-part)))
+  (:: (:? number-sign) decimal-whole-part (:? (:: "." decimal-fractional-part)) (:? decimal-exponent-part)))
 
 (define-lex-abbrev number (:or hex-number octal-number binary-number decimal-number))
 
 ; string
-
+(define-lex-abbrev backslash "\\")
+(define-lex-abbrev double-quote "\"")
+(define-lex-abbrev single-quote "'")
+(define-lex-abbrev backslash-escaped-chars
+  (:: backslash (:or backslash double-quote single-quote "n" "r" "t" "b" "f" "v")))
+(define-lex-abbrev hex-escape (:: backslash "x" hex-digit hex-digit))
+(define-lex-abbrev unicode-escape (:: backslash "u" (:= 4 hex-digit)))
+(define-lex-abbrev unicode-escape-code-point (:: backslash "u" "{" (:** 1 6 hex-digit) "}"))
+(define-lex-abbrev escaped-chars
+  (:or backslash-escaped-chars hex-escape unicode-escape unicode-escape-code-point))
+(define-lex-abbrev dq-string-char
+  (:or escaped-chars (:~ backslash double-quote)))
+(define-lex-abbrev sq-string-char
+  (:or escaped-chars (:~ backslash single-quote)))
+(define-lex-abbrev dq-string
+  (:: double-quote (:* dq-string-char) double-quote))
+(define-lex-abbrev sq-string
+  (:: single-quote (:* sq-string-char) single-quote))
+(define-lex-abbrev string (:or dq-string sq-string))
 
 (define rts-lexer
   (lexer-srcloc
    [whitespace (token lexeme #:skip? #t)]
    [line-comment (token lexeme #:skip? #t)]
    [block-comment (token lexeme #:skip? #t)]
-   [identifier (token 'IDENT lexeme)]
-   [number (token 'NUM lexeme)]
+   [identifier (token 'IDENTIFIER lexeme)]
+   [number (token 'NUMBER lexeme)]
+   [string (token 'STRING lexeme)]
    ))
-
-(define string-lexer
-  (lexer-srcloc
-   [(from/to "\"" "\"") (token 'STRING lexeme)]
-   ))
-
-; (define (rts-lexer port)
-;   (define (next-token port)
-;     (cond
-;       [(string-match? port "aaa")]
-
-
-
-
-; (define (string-match? port str)
-;   (define chars (string->list str))
-;   (for ([ch (in-string str)])
-;     (define next (peek port))
-;     (unless (char=? ch next)
-;       (return #f)))
-;   #t)
-
