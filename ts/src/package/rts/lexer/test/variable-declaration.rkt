@@ -1,0 +1,43 @@
+#lang lexer-t
+
+module-id: rts/lexer
+lexer: rts-lexer
+
+-----
+let x1 = 1;
+-----
+IDENTIFIER let
+IDENTIFIER x1
+PUNCTUATOR =
+NUMBER 1
+PUNCTUATOR ;
+-----
+let x2: number = 1;
+-----
+IDENTIFIER let
+IDENTIFIER x2
+PUNCTUATOR :
+IDENTIFIER number
+PUNCTUATOR =
+NUMBER 1
+PUNCTUATOR ;
+-----
+const x3 = 1;
+-----
+IDENTIFIER const
+IDENTIFIER x3
+PUNCTUATOR =
+NUMBER 1
+PUNCTUATOR ;
+-----
+const x4 = 1, x5 = 2;
+-----
+IDENTIFIER const
+IDENTIFIER x4
+PUNCTUATOR =
+NUMBER 1
+PUNCTUATOR ,
+IDENTIFIER x5
+PUNCTUATOR =
+NUMBER 2
+PUNCTUATOR ;

@@ -68,6 +68,28 @@
   (:: single-quote (:* sq-string-char) single-quote))
 (define-lex-abbrev string (:or dq-string sq-string))
 
+; punctuator
+(define-lex-abbrev open-parens "(")
+(define-lex-abbrev close-parens ")")
+(define-lex-abbrev open-bracket "[")
+(define-lex-abbrev close-bracket "]")
+(define-lex-abbrev open-brace "{")
+(define-lex-abbrev close-brace "}")
+(define-lex-abbrev assignment-operator
+  (:or "=" "+=" "-=" "**=" "*=" "/=" "%=" "<<=" ">>=" ">>>=" "&=" "^=" "|=" "&&=" "||=" "??="))
+(define-lex-abbrev equality-operator (:or "==" "!=" "===" "!=="))
+(define-lex-abbrev comparison-operator (:or "<" ">" "<=" ">="))
+(define-lex-abbrev arithmetic-operator (:or "+" "-" "*" "/" "%" "**"))
+(define-lex-abbrev bitwise-operator (:or "&" "|" "^" "~" "<<" ">>" ">>>"))
+(define-lex-abbrev logical-operator (:or "&&" "||" "!"))
+(define-lex-abbrev unary-operator (:or "++" "--"))
+(define-lex-abbrev nullish-operator (:or "??" "?."))
+(define-lex-abbrev other-punctuator (:or "." "," ":" ";" "?" "..." "=>"))
+(define-lex-abbrev punctuator
+  (:or open-parens close-parens open-bracket close-bracket open-brace close-brace
+       assignment-operator equality-operator comparison-operator arithmetic-operator
+       bitwise-operator logical-operator unary-operator nullish-operator other-punctuator))
+
 (define rts-lexer
   (lexer-srcloc
    [whitespace (token lexeme #:skip? #t)]
@@ -76,4 +98,5 @@
    [identifier (token 'IDENTIFIER lexeme)]
    [number (token 'NUMBER lexeme)]
    [string (token 'STRING lexeme)]
+   [punctuator (token 'PUNCTUATOR lexeme)]
    ))
