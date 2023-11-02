@@ -1,0 +1,3 @@
+#lang rts/parse-only
+
+{}

@@ -6,38 +6,38 @@ lexer: rts-lexer
 -----
 let x1 = 1;
 -----
-IDENTIFIER let
-IDENTIFIER x1
-PUNCTUATOR =
+let let
+x1 x1
+= =
 NUMBER 1
-PUNCTUATOR ;
+; ;
 -----
 let x2: number = 1;
 -----
-IDENTIFIER let
-IDENTIFIER x2
-PUNCTUATOR :
-IDENTIFIER number
-PUNCTUATOR =
+let let
+x2 x2
+: :
+number number
+= =
 NUMBER 1
-PUNCTUATOR ;
+; ;
 -----
 const x3 = 1;
 -----
-IDENTIFIER const
-IDENTIFIER x3
-PUNCTUATOR =
+const const
+x3 x3
+= =
 NUMBER 1
-PUNCTUATOR ;
+; ;
 -----
 const x4 = 1, x5 = 2;
 -----
-IDENTIFIER const
-IDENTIFIER x4
-PUNCTUATOR =
+const const
+x4 x4
+= =
 NUMBER 1
-PUNCTUATOR ,
-IDENTIFIER x5
-PUNCTUATOR =
+, ,
+x5 x5
+= =
 NUMBER 2
-PUNCTUATOR ;
+; ;

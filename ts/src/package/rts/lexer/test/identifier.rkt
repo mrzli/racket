@@ -4,19 +4,10 @@ module-id: rts/lexer
 lexer: rts-lexer
 
 -----
-stuff to lex
-second part
+let
+function
+x
 -----
-IDENTIFIER stuff
-IDENTIFIER to
-IDENTIFIER lex
-IDENTIFIER second
-IDENTIFIER part
-
------
-another stuff to lex
------
-IDENTIFIER another
-IDENTIFIER stuff
-IDENTIFIER to
-IDENTIFIER lex
+let let
+function function
+x x

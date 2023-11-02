@@ -6,135 +6,135 @@ lexer: rts-lexer
 -----
 let x1 = obj.prop;
 -----
-IDENTIFIER let
-IDENTIFIER x1
-PUNCTUATOR =
-IDENTIFIER obj
-PUNCTUATOR .
-IDENTIFIER prop
-PUNCTUATOR ;
+let let
+x1 x1
+= =
+obj obj
+. .
+prop prop
+; ;
 -----
 let x2 = obj?.prop;
 -----
-IDENTIFIER let
-IDENTIFIER x2
-PUNCTUATOR =
-IDENTIFIER obj
-PUNCTUATOR ?.
-IDENTIFIER prop
-PUNCTUATOR ;
+let let
+x2 x2
+= =
+obj obj
+?. ?.
+prop prop
+; ;
 -----
 let x3 = obj!;
 -----
-IDENTIFIER let
-IDENTIFIER x3
-PUNCTUATOR =
-IDENTIFIER obj
-PUNCTUATOR !
-PUNCTUATOR ;
+let let
+x3 x3
+= =
+obj obj
+! !
+; ;
 -----
 let x4 = obj[1];
 -----
-IDENTIFIER let
-IDENTIFIER x4
-PUNCTUATOR =
-IDENTIFIER obj
-PUNCTUATOR [
+let let
+x4 x4
+= =
+obj obj
+[ [
 NUMBER 1
-PUNCTUATOR ]
-PUNCTUATOR ;
+] ]
+; ;
 -----
 call(...obj);
 -----
-IDENTIFIER call
-PUNCTUATOR (
-PUNCTUATOR ...
-IDENTIFIER obj
-PUNCTUATOR )
-PUNCTUATOR ;
+call call
+( (
+... ...
+obj obj
+) )
+; ;
 -----
 call?.<string>();
 -----
-IDENTIFIER call
-PUNCTUATOR ?.
-PUNCTUATOR <
-IDENTIFIER string
-PUNCTUATOR >
-PUNCTUATOR (
-PUNCTUATOR )
-PUNCTUATOR ;
+call call
+?. ?.
+< <
+string string
+> >
+( (
+) )
+; ;
 -----
 let x = async <T1, T2>(p1: string): void => {};
 -----
-IDENTIFIER let
-IDENTIFIER x
-PUNCTUATOR =
-IDENTIFIER async
-PUNCTUATOR <
-IDENTIFIER T1
-PUNCTUATOR ,
-IDENTIFIER T2
-PUNCTUATOR >
-PUNCTUATOR (
-IDENTIFIER p1
-PUNCTUATOR :
-IDENTIFIER string
-PUNCTUATOR )
-PUNCTUATOR :
-IDENTIFIER void
-PUNCTUATOR =>
-PUNCTUATOR {
-PUNCTUATOR }
-PUNCTUATOR ;
+let let
+x x
+= =
+async async
+< <
+T1 T1
+, ,
+T2 T2
+> >
+( (
+p1 p1
+: :
+string string
+) )
+: :
+void void
+=> =>
+{ {
+} }
+; ;
 -----
 let x2 = ++x1;
 -----
-IDENTIFIER let
-IDENTIFIER x2
-PUNCTUATOR =
-PUNCTUATOR ++
-IDENTIFIER x1
-PUNCTUATOR ;
+let let
+x2 x2
+= =
+++ ++
+x1 x1
+; ;
 -----
 let x2 = x1--;
 -----
-IDENTIFIER let
-IDENTIFIER x2
-PUNCTUATOR =
-IDENTIFIER x1
-PUNCTUATOR --
-PUNCTUATOR ;
+let let
+x2 x2
+= =
+x1 x1
+-- --
+; ;
 -----
 const [{ field1 }] = array;
 -----
-IDENTIFIER const
-PUNCTUATOR [
-PUNCTUATOR {
-IDENTIFIER field1
-PUNCTUATOR }
-PUNCTUATOR ]
-PUNCTUATOR =
-IDENTIFIER array
-PUNCTUATOR ;
+const const
+[ [
+{ {
+field1 field1
+} }
+] ]
+= =
+array array
+; ;
 -----
 let x = -1 + (2 - y) * 3 / 4 % 5 ** 6;
 -----
-IDENTIFIER let
-IDENTIFIER x
-PUNCTUATOR =
+let let
+x x
+= =
 NUMBER -1
-PUNCTUATOR +
-PUNCTUATOR (
++ +
+( (
 NUMBER 2
-PUNCTUATOR -
-IDENTIFIER y
-PUNCTUATOR )
-PUNCTUATOR *
+- -
+y y
+) )
+* *
 NUMBER 3
-PUNCTUATOR /
+/ /
 NUMBER 4
-PUNCTUATOR %
+% %
 NUMBER 5
-PUNCTUATOR **
+** **
 NUMBER 6
-PUNCTUATOR ;
+; ;

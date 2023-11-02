@@ -96,8 +96,8 @@
    [whitespace (token lexeme #:skip? #t)]
    [line-comment (token lexeme #:skip? #t)]
    [block-comment (token lexeme #:skip? #t)]
-   [identifier (token 'IDENTIFIER lexeme)]
+   [identifier (token lexeme lexeme)]
    [number (token 'NUMBER lexeme)]
    [string (token 'STRING lexeme)]
-   [punctuator (token 'PUNCTUATOR lexeme)]
+   [punctuator (token lexeme lexeme)]
    ))
