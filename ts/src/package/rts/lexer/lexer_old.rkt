@@ -1,27 +1,8 @@
 #lang racket/base
 
-(require
-  parser-tools/lex
-  (prefix-in : parser-tools/lex-sre)
-  (for-syntax racket/base))
+(require brag/support)
 
-(provide rts-lexer value-tokens empty-tokens)
-
-(define-lex-trans from/to
-  (lambda (stx)
-    (syntax-case stx ()
-      [(_ OPEN CLOSE)
-       #'(:seq (from/stop-before OPEN CLOSE) CLOSE)])))
-
-(define-lex-trans from/stop-before
-  (lambda (stx)
-    (syntax-case stx ()
-      [(_ OPEN CLOSE)
-       ;; (:seq any-string CLOSE any-string) pattern makes it non-greedy
-       #'(:seq OPEN (complement (:seq any-string CLOSE any-string)))])))
-
-(define-tokens value-tokens (NUMBER STRING PUNCTUATOR IDENTIFIER))
-(define-empty-tokens empty-tokens (EOF))
+(provide rts-lexer)
 
 ; basic
 (define-lex-abbrev alpha-upper (:/ "A" "Z"))
@@ -111,13 +92,12 @@
        bitwise-operator logical-operator unary-operator nullish-operator other-punctuator))
 
 (define rts-lexer
-  (lexer-src-pos
-   [(eof) (token-EOF)]
-   [(:+ whitespace) (return-without-pos (rts-lexer input-port))]
-   [line-comment (return-without-pos (rts-lexer input-port))]
-   [block-comment (return-without-pos (rts-lexer input-port))]
-   [identifier (lexeme lexeme)]
-   [number (token-NUMBER lexeme)]
-   [string (token-STRING lexeme)]
-   [punctuator (lexeme lexeme)]
+  (lexer-srcloc
+   [whitespace (token lexeme #:skip? #t)]
+   [line-comment (token lexeme #:skip? #t)]
+   [block-comment (token lexeme #:skip? #t)]
+   [identifier (token lexeme lexeme)]
+   [number (token 'NUMBER lexeme)]
+   [string (token 'STRING lexeme)]
+   [punctuator (token lexeme lexeme)]
    ))

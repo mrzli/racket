@@ -1,18 +1,29 @@
 #lang racket/base
 
-(require rts/lexer brag/support racket/pretty)
+(require
+  rts/lexer
+  parser-tools/lex
+  racket/pretty)
 
-(define (lex str)
-  (apply-port-proc rts-lexer str))
+(define (lex port)
+  (port-count-lines! port)
+  (define (next-t port tokens)
+    (define token (rts-lexer port))
+    (if (equal?	(position-token-token token) 'EOF)
+        (reverse tokens)
+        (next-t port (cons token tokens))))
+
+  (define result (next-t port '()))
+  result
+  )
 
 (define (lex-concise str)
-  (define sl-tokens (lex str))
-  (define tokens (map (lambda (slt) (srcloc-token-token slt)) sl-tokens))
-  (for/list ([t (in-list tokens)]
-             #:unless (token-struct-skip? t))
-    (list (token-struct-type t) (token-struct-val t))))
+  (define p-tokens (lex (open-input-string str)))
+  (define tokens (map (lambda (slt) (position-token-token slt)) p-tokens))
+  tokens
+  )
 
 ;(pretty-print (lex "aa a\na//fdsa"))
-(pretty-print (lex-concise "aaa aaaa 12 12e+11"))
+(pretty-print (lex-concise "12 12e+11"))
 
 ; ((from/to "\"" "\"") (open-input-string "\"aaa\" bbb"))
