@@ -13,4 +13,59 @@
 
 
 
-- maybe have a separate DSL for making lexer tests, it will be tedious without it
+- lexer
+  - comment
+    - single line
+    - multi line
+  - identifier
+  - numeric literal
+  - string literal
+    - single quote
+    - double quote
+  - template literal
+    - no interpolation
+    - interpolation
+      - template head
+      - template middle
+      - template tail
+  - punctuator
+
+- comment
+  - single line
+    - //
+    - followed by 0 or more characters until the next \n or EOF
+  - multi line
+    - /*
+    - followed by 0 or more characters
+    - followed by */
+- identifier
+  - starts with
+    - $ or _ or a-z or A-Z
+  - can be followed by 0 or more
+    - the above or 0-9
+- number
+  - hex
+    - starts with 0x
+    - digits 0-9, a-f, A-F
+  - octal
+    - starts with 0o
+    - digits 0-7
+  - binary
+    - starts with 0b
+    - digits 0-1
+  - decimal
+    - 0 or 1-9 followed by 0 or more digits 0-9
+    - optional decimal point followed by 1 or more digits 0-9
+    - optional exponent part
+      - e or E
+      - optional sign
+        - + or -
+      - 1 or more digits 0-9
+  - can have underscores in between digits
+    - not at the beginning or end
+    - not consecutive
+
+
+- state machine
+  - expression-start
+  - punctuator-start
