@@ -100,7 +100,7 @@
 (define-lex-abbrev equality-operator (:or "==" "!=" "===" "!=="))
 (define-lex-abbrev comparison-operator (:or "<" ">" "<=" ">="))
 (define-lex-abbrev arithmetic-operator (:or "+" "-" "*" "/" "%" "**"))
-(define-lex-abbrev bitwise-operator (:or "&" "|" "^" "~" "<<" ">>" ">>>"))
+(define-lex-abbrev bitwise-operator (:or "&" "|" "^" "~" "@<<" "@>>" "@>>>"))
 (define-lex-abbrev logical-operator (:or "&&" "||" "!"))
 (define-lex-abbrev unary-operator (:or "++" "--"))
 (define-lex-abbrev nullish-operator (:or "??" "?."))
